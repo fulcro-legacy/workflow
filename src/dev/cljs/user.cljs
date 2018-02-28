@@ -3,22 +3,13 @@
     [fulcro.client :as fc]
     [workflow.client :as core]
     [workflow.ui.root :as root]
-    [cljs.pprint :refer [pprint]]
-    [fulcro.client.logging :as log]))
+    [fulcro.logging :as log]))
 
 (enable-console-print!)
 
-(log/set-level :all)
+(log/set-level! :debug)
 
 (defn mount []
   (reset! core/app (fc/mount @core/app root/Root "app")))
 
 (mount)
-
-(defn app-state [] @(:reconciler @core/app))
-
-(defn log-app-state [& keywords]
-  (pprint (let [app-state (app-state)]
-            (if (= 0 (count keywords))
-              app-state
-              (select-keys app-state keywords)))))

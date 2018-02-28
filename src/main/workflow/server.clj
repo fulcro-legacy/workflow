@@ -1,7 +1,7 @@
 (ns workflow.server
   (:require
     [fulcro.easy-server :refer [make-fulcro-server]]
-    ; MUST require these, or you won't get them installed.
+    [fulcro-sql.core :as sql]
     [workflow.api.read]
     [workflow.api.mutations]))
 

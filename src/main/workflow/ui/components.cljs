@@ -9,7 +9,6 @@
     [fulcro.client.routing :refer [defrouter]]
     [fulcro.client.dom :as dom]))
 
-;; A good place to put reusable components
 (defsc PlaceholderImage [this {:keys [w h label]}]
   (let [label (or label (str w "x" h))]
     (dom/svg #js {:width w :height h}
@@ -45,15 +44,19 @@
 
 (def ui-pet-list (prim/factory PetList))
 
+(defn focus-with-cursor-at-end
+  "Focus the given dom input node n, and move the cursor to the end."
+  [n]
+  (when n
+    (.focus n)
+    (set! (.-selectionEnd n) 100000)
+    (set! (.-selectionStart n) 100000)))
+
 (defsc PetForm [this {:keys [pet/name]} _]
   {:ident             [:pet/by-id :db/id]
    :form-fields       #{:pet/name}
    :query             [:db/id :pet/name fs/form-config-join]
-   :componentDidMount (fn []
-                        (when-let [n (dom/node this "input")]
-                          (.focus n)
-                          (set! (.-selectionEnd n) 100000)
-                          (set! (.-selectionStart n) 100000)))}
+   :componentDidMount (fn [] (when-let [n (dom/node this "input")] (focus-with-cursor-at-end n)))}
   (dom/div nil
     (dom/label #js {:htmlFor "pet-name"} "Name:")
     (dom/input #js {:value     (or name "") :id "pet-name"

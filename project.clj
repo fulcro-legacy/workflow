@@ -7,13 +7,23 @@
                  [org.clojure/clojurescript "1.9.946"]
                  [fulcrologic/fulcro "2.3.0"]
                  [fulcrologic/fulcro-css "2.0.0"]
+                 [fulcrologic/fulcro-sql "0.3.2"]
+                 [com.h2database/h2 "1.4.196"]
+
+                 ; logging all over timbre
+                 [com.taoensso/timbre "4.10.0"]
+                 [org.slf4j/log4j-over-slf4j "1.7.25" :scope "provided"]
+                 [org.slf4j/jul-to-slf4j "1.7.25" :scope "provided"]
+                 [org.slf4j/jcl-over-slf4j "1.7.25" :scope "provided"]
+                 [com.fzakaria/slf4j-timbre "0.3.7" :scope "provided"]
+
                  [fulcrologic/fulcro-spec "2.0.3" :scope "test" :exclusions [fulcrologic/fulcro]]]
 
   :uberjar-name "workflow.jar"
 
   :source-paths ["src/main"]
   :test-paths ["src/test"]
-  :clean-targets ^{:protect false} ["target" "resources/public/js" "resources/private"]
+  :clean-targets ^{:protect false} ["target" "resources/public/js"]
 
   ; Notes  on production build:
   ; To limit possible dev config interference with production builds
@@ -39,9 +49,6 @@
                           :jvm-opts     ["-XX:-OmitStackTraceInFastThrow" "-client" "-XX:+TieredCompilation" "-XX:TieredStopAtLevel=1"
                                          "-Xmx1g" "-XX:+UseConcMarkSweepGC" "-XX:+CMSClassUnloadingEnabled" "-Xverify:none"]
 
-                          :doo          {:build "automated-tests"
-                                         :paths {:karma "node_modules/karma/bin/karma"}}
-
                           :figwheel     {:css-dirs ["resources/public/css"]}
 
                           :test-refresh {:report       fulcro-spec.reporters.terminal/fulcro-report
@@ -59,29 +66,6 @@
                                                           :output-to            "resources/public/js/workflow.js"
                                                           :preloads             [devtools.preload fulcro.inspect.preload]
                                                           :source-map-timestamp true}}
-                                          {:id           "i18n" ;for gettext string extraction
-                                           :source-paths ["src/main"]
-                                           :compiler     {:asset-path    "i18n"
-                                                          :main          workflow.client-main
-                                                          :optimizations :whitespace
-                                                          :output-dir    "i18n/tmp"
-                                                          :output-to     "i18n/i18n.js"}}
-                                          {:id           "test"
-                                           :source-paths ["src/test" "src/main"]
-                                           :figwheel     {:on-jsload "workflow.client-test-main/client-tests"}
-                                           :compiler     {:asset-path    "js/test"
-                                                          :main          workflow.client-test-main
-                                                          :optimizations :none
-                                                          :output-dir    "resources/public/js/test"
-                                                          :output-to     "resources/public/js/test/test.js"
-                                                          :preloads      [devtools.preload]}}
-                                          {:id           "automated-tests"
-                                           :source-paths ["src/test" "src/main"]
-                                           :compiler     {:asset-path    "js/ci"
-                                                          :main          workflow.CI-runner
-                                                          :optimizations :none
-                                                          :output-dir    "resources/private/js/ci"
-                                                          :output-to     "resources/private/js/unit-tests.js"}}
                                           {:id           "cards"
                                            :figwheel     {:devcards true}
                                            :source-paths ["src/main" "src/cards"]
@@ -94,7 +78,6 @@
                                                           :source-map-timestamp true}}]}
 
                           :plugins      [[lein-cljsbuild "1.1.7"]
-                                         [lein-doo "0.1.8"]
                                          [com.jakemccrary/lein-test-refresh "0.22.0"]]
 
                           :dependencies [[binaryage/devtools "0.9.9"]
@@ -102,7 +85,6 @@
                                          [org.clojure/tools.namespace "0.3.0-alpha4"]
                                          [org.clojure/tools.nrepl "0.2.13"]
                                          [com.cemerick/piggieback "0.2.2"]
-                                         [lein-doo "0.1.7" :scope "test"]
                                          [figwheel-sidecar "0.5.14" :exclusions [org.clojure/tools.reader]]
                                          [devcards "0.2.4" :exclusions [cljsjs/react cljsjs/react-dom]]]
                           :repl-options {:init-ns          user

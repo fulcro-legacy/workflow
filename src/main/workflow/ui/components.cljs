@@ -82,5 +82,3 @@
   :pet-form PetFormPane)
 
 (def ui-pet-widget (prim/factory PetWidget))
-
-

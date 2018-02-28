@@ -37,6 +37,7 @@
   "Mutation: Delete the given pet by ID."
   [{:keys [id]}]
   (action [{:keys [state]}] (swap! state delete-pet* id))
+  (remote [env] true)
   (refresh [env] [:router]))
 
 (defmutation save-edits

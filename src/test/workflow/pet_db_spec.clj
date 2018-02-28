@@ -27,4 +27,13 @@
           "Finds all of the pets in the database"
           sorted-rows => [{:db/id camper :pet/name "Camper"}
                           {:db/id tillie :pet/name "Tillie"}
-                          {:db/id buddy :pet/name "Buddy"}])))))
+                          {:db/id buddy :pet/name "Buddy"}]))
+      (component "delete-pet"
+        (petdb/delete-pet db tillie)
+
+        (let [rows        (petdb/get-pets db)
+              sorted-rows (sort-by :db/id rows)]
+          (assertions
+            "Removes a pet from the database"
+            sorted-rows => [{:db/id camper :pet/name "Camper"}
+                            {:db/id buddy :pet/name "Buddy"}]))))))

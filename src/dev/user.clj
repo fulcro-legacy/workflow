@@ -94,8 +94,7 @@
                                 (sql/seed-row :pet {:id :id/cooper :name "Cooper"})]))
 
   (let [db (get-database)]
-    (jdbc/query db ["SELECT * FROM pet"]))
-  )
+    (jdbc/query db ["SELECT * FROM pet"])))
 
 ; Run (start-server-tests) in a REPL to start a runner that can render results in a browser
 (suite/def-test-suite start-server-tests

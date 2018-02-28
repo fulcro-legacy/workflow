@@ -7,10 +7,12 @@
                  [org.clojure/clojurescript "1.9.946"]
                  [fulcrologic/fulcro "2.3.0"]
                  [fulcrologic/fulcro-css "2.0.0"]
+
+                 ; Database support
                  [fulcrologic/fulcro-sql "0.3.2"]
                  [com.h2database/h2 "1.4.196"]
 
-                 ; logging all over timbre
+                 ; logging everything on the server over timbre
                  [com.taoensso/timbre "4.10.0"]
                  [org.slf4j/log4j-over-slf4j "1.7.25" :scope "provided"]
                  [org.slf4j/jul-to-slf4j "1.7.25" :scope "provided"]

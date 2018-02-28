@@ -1,6 +1,6 @@
 {:port   3000
- :sqldbm {:db {:hikaricp-config "config/connection-pool.properties"
-               :driver          :h2
-               :auto-migrate?   true
-               :create-drop?    true
-               :migrations      ["classpath:config/migrations"]}}}
+ :sqldbm {:pets {:hikaricp-config "config/connection-pool.properties"
+                 :driver          :h2
+                 :auto-migrate?   true
+                 :create-drop?    true
+                 :migrations      ["classpath:config/migrations"]}}}

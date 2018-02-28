@@ -19,7 +19,7 @@
                  [org.slf4j/jcl-over-slf4j "1.7.25" :scope "provided"]
                  [com.fzakaria/slf4j-timbre "0.3.7" :scope "provided"]
 
-                 [fulcrologic/fulcro-spec "2.0.3" :scope "test" :exclusions [fulcrologic/fulcro]]]
+                 [fulcrologic/fulcro-spec "2.0.3-1" :scope "test" :exclusions [fulcrologic/fulcro]]]
 
   :uberjar-name "workflow.jar"
 
@@ -33,12 +33,13 @@
   :cljsbuild {:builds [{:id           "production"
                         :source-paths ["src/main"]
                         :jar          true
-                        :compiler     {:asset-path    "js/prod"
-                                       :main          workflow.client-main
-                                       :optimizations :advanced
-                                       :source-map    "resources/public/js/workflow.js.map"
-                                       :output-dir    "resources/public/js/prod"
-                                       :output-to     "resources/public/js/workflow.js"}}]}
+                        :compiler     {:asset-path     "js/prod"
+                                       :main           workflow.client-main
+                                       :optimizations  :advanced
+                                       :parallel-build true
+                                       :source-map     "resources/public/js/workflow.js.map"
+                                       :output-dir     "resources/public/js/prod"
+                                       :output-to      "resources/public/js/workflow.js"}}]}
 
   :profiles {:uberjar    {:main           workflow.server-main
                           :aot            :all
@@ -64,6 +65,7 @@
                                            :compiler     {:asset-path           "js/dev"
                                                           :main                 cljs.user
                                                           :optimizations        :none
+                                                          :parallel-build       true
                                                           :output-dir           "resources/public/js/dev"
                                                           :output-to            "resources/public/js/workflow.js"
                                                           :preloads             [devtools.preload fulcro.inspect.preload]
@@ -74,6 +76,7 @@
                                            :compiler     {:asset-path           "js/cards"
                                                           :main                 workflow.cards
                                                           :optimizations        :none
+                                                          :parallel-build       true
                                                           :output-dir           "resources/public/js/cards"
                                                           :output-to            "resources/public/js/cards.js"
                                                           :preloads             [devtools.preload]

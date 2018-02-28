@@ -3,9 +3,15 @@
     [clojure.tools.namespace.repl :as tools-ns :refer [set-refresh-dirs]]
     [com.stuartsierra.component :as component]
     [figwheel-sidecar.system :as fig]
+    [clojure.java.jdbc :as jdbc]
     [fulcro-spec.suite :as suite]
     [fulcro-spec.selectors :as sel]
-    workflow.server))
+    workflow.server
+    [workflow.api.database :as petdb]
+    [taoensso.timbre :as timbre]
+    [fulcro-sql.core :as sql]))
+
+(timbre/set-level! :info)
 
 ;;FIGWHEEL
 (def figwheel (atom nil))
@@ -37,7 +43,7 @@
 
 ;; ==================== SERVER ====================
 
-(set-refresh-dirs "src/cards" "src/dev" "src/main" "src/test")
+(set-refresh-dirs "src/dev" "src/main")
 
 (defn started? [sys]
   (-> sys :config :value))
@@ -77,6 +83,20 @@
   (stop)
   (refresh :after 'user/go))
 
+(defn get-database
+  "Get the database from the running system"
+  []
+  (sql/get-dbspec (-> system deref :databases) :pets))
+
+(comment
+  (let [db (get-database)]
+    (sql/seed! db petdb/schema [(sql/seed-row :pet {:id :id/guppers :name "Guppers"})
+                                (sql/seed-row :pet {:id :id/cooper :name "Cooper"})]))
+
+  (let [db (get-database)]
+    (jdbc/query db ["SELECT * FROM pet"]))
+  )
+
 ; Run (start-server-tests) in a REPL to start a runner that can render results in a browser
 (suite/def-test-suite start-server-tests
   {:config       {:port 8888}
@@ -84,4 +104,3 @@
    :source-paths ["dev/server" "src/main"]}
   {:available #{:focused :integration}
    :default   #{::sel/none :focused}})
-
